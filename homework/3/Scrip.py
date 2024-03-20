@@ -1,7 +1,5 @@
-# 開啟文字檔
 x=[]
 with open('test.txt', 'r') as file:
-    # 讀取並印出檔案內容
     for line in file:
         line=line.strip()
         t="  "
@@ -18,6 +16,5 @@ with open('test.txt', 'r') as file:
 
 print(x)
 with open('test.txt', 'w') as f:
-    # 將內容寫入
     for i in x:
         f.write(i+"\n")
