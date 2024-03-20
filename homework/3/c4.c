@@ -83,100 +83,100 @@ int run(int *pc, int *bp, int *sp) { // 虛擬機 => pc: 程式計數器, sp: �
 
 int main() // 主程式
 {
-  int *pc, *bp, *sp, poolsz, t ,*power, *loc;
+	int *pc, *bp, *sp, poolsz, t ,*power, *loc;
 
-  poolsz = 256*1024; // arbitrary size
-  if (!(e = malloc(poolsz))) { printf("could not malloc(%d) text area\n", poolsz); return -1; } // 程式段
-  if (!(sp = malloc(poolsz))) { printf("could not malloc(%d) stack area\n", poolsz); return -1; }  // 堆疊段
+	poolsz = 256*1024; // arbitrary size
+	if (!(e = malloc(poolsz))) { printf("could not malloc(%d) text area\n", poolsz); return -1; } // 程式段
+	if (!(sp = malloc(poolsz))) { printf("could not malloc(%d) stack area\n", poolsz); return -1; }  // 堆疊段
 
-  memset(e,    0, poolsz);
+	memset(e,    0, poolsz);
 
-  power = e;
+	power = e;
 //1: #include <stdio.h>
 //2:
 //3: int power(int a, int n) {
 //4:     if (n == 0) {
-  *e++ = ENT; *e++ = 0;
-  *e++ = LLA; *e++ = 2;
-  *e++ = LI;
-  *e++ = PSH;
-  *e++ = IMM; *e++ = 0;
-  *e++ = EQ;
-  *e++ = BZ; loc=e; *e++ = 0; 
+	*e++ = ENT; *e++ = 0;
+	*e++ = LLA; *e++ = 2;
+	*e++ = LI;
+	*e++ = PSH;
+	*e++ = IMM; *e++ = 0;
+	*e++ = EQ;
+	*e++ = BZ; loc=e; *e++ = 0; 
 //5:         return 1;
-  *e++ = IMM; *e++ = 1;
-  *e++ = LEV;
+	*e++ = IMM; *e++ = 1;
+	*e++ = LEV;
 //6:     } else if (n < 0) {
-  *e++ = JMP; *e++ = 0;
-  *loc = (int) e; *e++ = LLA; *e++ = 2;
-  *e++ = LI;
-  *e++ = PSH;
-  *e++ = IMM; *e++ = 0;
-  *e++ = LT;
-  *e++ = BZ; loc=e; *e++ = 0; 
+	*e++ = JMP; *e++ = 0;
+	*loc = (int) e; *e++ = LLA; *e++ = 2;
+	*e++ = LI;
+	*e++ = PSH;
+	*e++ = IMM; *e++ = 0;
+	*e++ = LT;
+	*e++ = BZ; loc=e; *e++ = 0; 
 //7:         return 1 / power(a, -n);
-  *e++ = IMM; *e++ = 1;
-  *e++ = PSH;
-  *e++ = LLA; *e++ = 3;
-  *e++ = LI;
-  *e++ = PSH;
-  *e++ = IMM; *e++ = -1;
-  *e++ = PSH;
-  *e++ = LLA; *e++ = 2;
-  *e++ = LI;
-  *e++ = MUL;
-  *e++ = PSH;
-  *e++ = JSR; *e++ = (int)power;
-  *e++ = ADJ; *e++ = 2;
-  *e++ = DIV;
-  *e++ = LEV;
+	*e++ = IMM; *e++ = 1;
+	*e++ = PSH;
+	*e++ = LLA; *e++ = 3;
+	*e++ = LI;
+	*e++ = PSH;
+	*e++ = IMM; *e++ = -1;
+	*e++ = PSH;
+	*e++ = LLA; *e++ = 2;
+	*e++ = LI;
+	*e++ = MUL;
+	*e++ = PSH;
+	*e++ = JSR; *e++ = (int)power;
+	*e++ = ADJ; *e++ = 2;
+	*e++ = DIV;
+	*e++ = LEV;
 //8:     } else {
-  *e++ = JMP; *e++ = 0;
+	*e++ = JMP; *e++ = 0;
 //9:         return a * power(a, n - 1);
-  *loc = (int) e; *e++ = LLA; *e++ = 3;
-  *e++ = LI;
-  *e++ = PSH;
-  *e++ = LLA; *e++ = 3;
-  *e++ = LI;
-  *e++ = PSH;
-  *e++ = LLA; *e++ = 2;
-  *e++ = LI;
-  *e++ = PSH;
-  *e++ = IMM; *e++ = 1;
-  *e++ = SUB;
-  *e++ = PSH;
-  *e++ = JSR; *e++ = (int)power;
-  *e++ = ADJ; *e++ = 2;
-  *e++ = MUL;
-  *e++ = LEV;
+	*loc = (int) e; *e++ = LLA; *e++ = 3;
+	*e++ = LI;
+	*e++ = PSH;
+	*e++ = LLA; *e++ = 3;
+	*e++ = LI;
+	*e++ = PSH;
+	*e++ = LLA; *e++ = 2;
+	*e++ = LI;
+	*e++ = PSH;
+	*e++ = IMM; *e++ = 1;
+	*e++ = SUB;
+	*e++ = PSH;
+	*e++ = JSR; *e++ = (int)power;
+	*e++ = ADJ; *e++ = 2;
+	*e++ = MUL;
+	*e++ = LEV;
 //10:     }
 //11: }
-  *e++ = LEV;
+	*e++ = LEV;
 //12:
 //13: int main() {
 //14:   printf("power(2,8)=%d\n", power(2,8));
-  pc=e;
-  *e++ = ENT; *e++ = 0;
-  *e++ = IMM; *e++ = (int)"power(2,8)=%d\n";
-  *e++ = PSH;
-  *e++ = IMM; *e++ = 2;
-  *e++ = PSH;
-  *e++ = IMM; *e++ = 8;
-  *e++ = PSH;
-  *e++ = JSR; *e++ = (int)power;
-  *e++ = ADJ; *e++ = 2;
-  *e++ = PSH;
-  *e++ = PRTF;
-  *e++ = ADJ; *e++ = 2;
+	pc=e;
+	*e++ = ENT; *e++ = 0;
+	*e++ = IMM; *e++ = (int)"power(2,8)=%d\n";
+	*e++ = PSH;
+	*e++ = IMM; *e++ = 2;
+	*e++ = PSH;
+	*e++ = IMM; *e++ = 8;
+	*e++ = PSH;
+	*e++ = JSR; *e++ = (int)power;
+	*e++ = ADJ; *e++ = 2;
+	*e++ = PSH;
+	*e++ = PRTF;
+	*e++ = ADJ; *e++ = 2;
 //15:   return 0;
-  *e++ = IMM; *e++ = 0;
-  *e++ = LEV;
+	*e++ = IMM; *e++ = 0;
+	*e++ = LEV;
 //16: }
-  *e++ = LEV;
-  // setup stack
-  bp = sp = (int *)((int)sp + poolsz);
-  *--sp = EXIT; // call exit if main returns
-  *--sp = PSH; t = *sp;
-  *--sp = (int)t;
-  return run(pc, bp, sp);
+	*e++ = LEV;
+	// setup stack
+	bp = sp = (int *)((int)sp + poolsz);
+	*--sp = EXIT; // call exit if main returns
+	*--sp = PSH; t = *sp;
+	*--sp = (int)t;
+	return run(pc, bp, sp);
 }
