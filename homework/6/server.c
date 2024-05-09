@@ -3,7 +3,7 @@
 
 Vector_t vector;
 
-void* serv(void* idx){
+void* serv(void* idx){//thread 的 function
 	int sockfd = vector.data[*(int*)idx].id;
 	while(1){
 		char buffer[SMAX];
@@ -29,7 +29,7 @@ void* loop(void* arg){
 	}
 }
 
-void broadcast(char cmd[]){
+void broadcast(char cmd[]){//廣播
 	for(int i=0;i<vector.size;i++)
 		if(vector.data[i].id != -1)
 			write(vector.data[i].id, cmd, strlen(cmd));
