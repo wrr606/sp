@@ -3,11 +3,6 @@
 
 Vector_t vector;
 
-typedef struct {
-    int id;
-    int index;
-} Args;
-
 void* serv(void* idx){
 	int sockfd = vector.data[*(int*)idx].id;
 	while(1){
