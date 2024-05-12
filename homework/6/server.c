@@ -19,7 +19,7 @@ void* serv(void* idx){//thread 的 function
 net_t net;
 void* loop(void* arg){
 	while(1) { // 主迴圈：等待 client 連進來，然後啟動 serv 為其服務
-		int connfd = net_accept(&net); // 等待連線進來
+		int connfd = net_accept(&net); //等待連線進來
 		assert(connfd >= 0);
 		vector_push_back(&vector,connfd);
 		int* idx_ptr = (int*)malloc(sizeof(int)); 
