@@ -17,6 +17,6 @@ typedef struct {
 } Vector_t;
 
 Vector_t vector_create();
-void vector_destroy(Vector_t *vec);
+void vector_push_back(Vector_t *vec, int value);
 
 #endif // VECTOR_H
