@@ -56,34 +56,27 @@ void print(const char *txt, ...){
         if(*txt == '%'){
             ++txt;
             switch (*txt){
-                case '%':{
+                case '%':
                     putc('%', stdout);
                     break;
-                }
-                case 'd':{
+                case 'd':
                     _print_int(va_arg(args, int));
                     break;
-                }
-                case 'f':{
+                case 'f':
                     _print_float(va_arg(args, double));
                     break;
-                }
-                case 'c':{
+                case 'c':
                     putc((char)va_arg(args, int), stdout);
                     break;
-                }
-                case 's':{
+                case 's':
                     _print_string(va_arg(args, const char*));
                     break;
-                }
-                case 'p':{
+                case 'p':
                     _print_pointer(va_arg(args, const char*));
                     break;
-                }
-                default:{
+                default:
                     putc('%', stdout), putc(*txt, stdout);
                     break;
-                }
             }
         }
         else
